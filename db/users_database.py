@@ -1,3 +1,4 @@
+from pickletools import read_uint1
 from sqlalchemy.orm.session import Session
 from db.hash import Hash
 from db.models import DbUser
@@ -18,3 +19,10 @@ def create_user(db: Session, request: UserBase):
     db.commit()
     db.refresh(new_user)
     return new_user
+
+def get_user(db:Session,id:int):
+
+    user = db.query(DbUser).filter(DbUser.id == id).first()
+    #handle error
+
+    return user

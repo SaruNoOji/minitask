@@ -18,3 +18,7 @@ def index():
 @router.post("/", status_code=status.HTTP_200_OK, response_model=DisplayUser)
 def create_user(request: UserBase, db: Session = Depends(get_db)):
     return users_database.create_user(db,request)
+
+@router.get('/{id}', status_code=status.HTTP_200_OK, response_model=DisplayUser)
+def get_user(id:int,db:Session=Depends(get_db)):
+    return users_database.get_user(db,id)
