@@ -1,3 +1,4 @@
+from typing import List
 from webbrowser import get
 from fastapi import APIRouter, Depends
 from fastapi import status
@@ -11,9 +12,9 @@ router = APIRouter(
     tags=['users']
 )
 
-@router.get("/")
-def index():
-    return "Ok"
+@router.get("/", response_model=List[DisplayUser])
+def get_all_users(db: Session = Depends(get_db)):
+    return users_database.get_all_users(db)
 
 @router.post("/", status_code=status.HTTP_200_OK, response_model=DisplayUser)
 def create_user(request: UserBase, db: Session = Depends(get_db)):
