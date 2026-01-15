@@ -3,3 +3,5 @@ uvicorn[standard]
 sqlalchemy
 pydantic
 passlib[bcrypt]
+bcrypt<4
+pydantic[email]

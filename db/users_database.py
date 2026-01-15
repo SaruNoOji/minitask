@@ -5,6 +5,8 @@ from schemas import UserBase
 
 def create_user(db: Session, request: UserBase):
 
+    #handle errors
+
     new_user = DbUser(
 
         username = request.username,
