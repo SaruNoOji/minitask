@@ -8,3 +8,8 @@ class UserBase(BaseModel):
     email: EmailStr
     password: str
 
+class DisplayUser(BaseModel):
+
+    id: int
+    username : str
+    email: str
