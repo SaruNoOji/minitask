@@ -31,3 +31,13 @@ def get_user(db:Session,id:int):
     #handle error
 
     return user
+
+def delete_user(db:Session, id:int):
+
+    user = db.query(DbUser).filter(DbUser.id == id).first()
+
+    #handle error
+    db.delete(user)
+    db.commit()
+
+    return "ok"

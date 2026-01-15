@@ -12,7 +12,7 @@ router = APIRouter(
     tags=['users']
 )
 
-@router.get("/", response_model=List[DisplayUser])
+@router.get("/",status_code=status.HTTP_200_OK ,response_model=List[DisplayUser])
 def get_all_users(db: Session = Depends(get_db)):
     return users_database.get_all_users(db)
 
@@ -23,3 +23,7 @@ def create_user(request: UserBase, db: Session = Depends(get_db)):
 @router.get('/{id}', status_code=status.HTTP_200_OK, response_model=DisplayUser)
 def get_user(id:int,db:Session=Depends(get_db)):
     return users_database.get_user(db,id)
+
+@router.delete('/{id}', status_code=status.HTTP_204_NO_CONTENT)
+def delete_user(id:int, db:Session =Depends(get_db)):
+    return users_database.delete_user(db,id)
