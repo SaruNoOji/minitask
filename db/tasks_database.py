@@ -52,3 +52,14 @@ def update_task(db: Session, request: TaskUpdate, id:int):
     db.commit()
 
     return task
+
+def delete_task(db:Session, id:int):
+
+    task = db.query(DbTasks).filter(DbTasks.id == id).first()
+    if not task:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail= "Task not found")
+    
+    db.delete(task)
+    db.commit()
+
+    return None
