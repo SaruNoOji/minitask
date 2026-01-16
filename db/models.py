@@ -9,9 +9,9 @@ class DbUser(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
-    username = Column(String, unique=True)
-    email = Column (String,unique=True)
-    password = Column(String)
+    username = Column(String, unique=True, nullable=False)
+    email = Column (String,unique=True, nullable=False)
+    password = Column(String, nullable=False)
 
     tasks = relationship(
         "DbTasks",
@@ -23,10 +23,10 @@ class DbUser(Base):
 class DbTasks(Base):
     __tablename__ = 'tasks'
 
-    id = Column(Integer, primary_key=True, index=True )
-    title = Column(String)
+    id = Column(Integer, primary_key=True)
+    title = Column(String, nullable=False)
     description = Column (String,nullable=True)
-    status = Column(String, nullable = False)
+    status = Column(String, nullable = False,default="new")
     user_id = Column(Integer, ForeignKey('users.id', ondelete="CASCADE"), nullable= False)
     created_at = Column(DateTime, nullable= False, default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime, nullable= False, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))

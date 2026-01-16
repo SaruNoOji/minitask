@@ -1,4 +1,3 @@
-from os import read
 from sqlalchemy.orm.session import Session
 from db.models import DbTasks, DbUser
 from schemas import TasksCreate, TaskUpdate
@@ -16,7 +15,7 @@ def create_task(db: Session, request: TasksCreate, user_id: int):
 
         title = request.title,
         description = request.description,
-        status = request.status,
+        status = request.status.value,
         user_id = user_id
 
     )
@@ -47,9 +46,10 @@ def update_task(db: Session, request: TaskUpdate, id:int):
     if request.description is not None:
         task.description = request.description
     if request.status is not None:
-        task.status = request.status
+        task.status = request.status.value
 
     db.commit()
+    db.refresh(task)
 
     return task
 
@@ -71,7 +71,7 @@ def get_users_tasks(db:Session,user_id:int,task_status):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='User not found')
     
     if task_status != None:
-        tasks_filtred = db.query(DbTasks).filter(DbTasks.user_id == user_id).filter(DbTasks.status == task_status).all()
+        tasks_filtred = db.query(DbTasks).filter(DbTasks.user_id == user_id).filter(DbTasks.status == task_status.value).all()
         return tasks_filtred
     
     tasks  = db.query(DbTasks).filter(DbTasks.user_id == user_id).all()
