@@ -27,8 +27,8 @@ class DbTasks(Base):
     title = Column(String)
     description = Column (String,nullable=True)
     status = Column(String)
-    user_id = Column(Integer, ForeignKey('users.id', ondelete="CASCADE"))
+    user_id = Column(Integer, ForeignKey('users.id', ondelete="CASCADE"), nullable= False)
     created_at = Column(DateTime, nullable= False, default=lambda: datetime.now(timezone.utc))
-    updated_at = Column(DateTime, nullable= False, default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime, nullable= False, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     user = relationship("DbUser", back_populates="tasks")

@@ -3,9 +3,11 @@ from webbrowser import get
 from fastapi import APIRouter, Depends
 from fastapi import status
 from schemas import UserBase, DisplayUser
+from schemas import TasksCreate, TasksDisplay, TaskUpdate
 from sqlalchemy.orm.session import Session
 from db.database import get_db
 from db import users_database
+from db import tasks_database
 
 router = APIRouter(
     prefix='/users',
@@ -27,3 +29,9 @@ def get_user(id:int,db:Session=Depends(get_db)):
 @router.delete('/{id}', status_code=status.HTTP_204_NO_CONTENT)
 def delete_user(id:int, db:Session =Depends(get_db)):
     return users_database.delete_user(db,id)
+
+
+#tasks
+@router.post("/{id}/tasks", tags=["tasks"],status_code=status.HTTP_201_CREATED, response_model=TasksDisplay)
+def create_task(id:int,request : TasksCreate,db:Session = Depends(get_db)):
+    return tasks_database.create_task(db,request,id)

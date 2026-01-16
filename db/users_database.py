@@ -1,4 +1,3 @@
-from pickletools import read_uint1
 from sqlalchemy.orm.session import Session
 from db.hash import Hash
 from db.models import DbUser
