@@ -63,3 +63,17 @@ def delete_task(db:Session, id:int):
     db.commit()
 
     return None
+
+def get_users_tasks(db:Session,user_id:int,task_status):
+
+    user = db.query(DbUser).filter(DbUser.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='User not found')
+    
+    if task_status != None:
+        tasks_filtred = db.query(DbTasks).filter(DbTasks.user_id == user_id).filter(DbTasks.status == task_status).all()
+        return tasks_filtred
+    
+    tasks  = db.query(DbTasks).filter(DbTasks.user_id == user_id).all()
+    return tasks
+    

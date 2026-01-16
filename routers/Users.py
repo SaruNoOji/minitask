@@ -1,9 +1,9 @@
-from typing import List
+from typing import List, Optional
 from webbrowser import get
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from fastapi import status
 from schemas import UserBase, DisplayUser
-from schemas import TasksCreate, TasksDisplay, TaskUpdate
+from schemas import TasksCreate, TasksDisplay, TaskUpdate, TaskStatus
 from sqlalchemy.orm.session import Session
 from db.database import get_db
 from db import users_database
@@ -32,6 +32,10 @@ def delete_user(id:int, db:Session =Depends(get_db)):
 
 
 #tasks
-@router.post("/{id}/tasks", tags=["tasks"],status_code=status.HTTP_201_CREATED, response_model=TasksDisplay)
-def create_task(id:int,request : TasksCreate,db:Session = Depends(get_db)):
-    return tasks_database.create_task(db,request,id)
+@router.post("/{user_id}/tasks", tags=["tasks"],status_code=status.HTTP_201_CREATED, response_model=TasksDisplay)
+def create_task(user_id:int,request : TasksCreate,db:Session = Depends(get_db)):
+    return tasks_database.create_task(db,request,user_id)
+
+@router.get("/{user_id}/tasks",tags=["tasks"], status_code=status.HTTP_200_OK,response_model=List[TasksDisplay])
+def get_users_tasks(user_id:int,status : Optional[TaskStatus]= Query(None),db:Session = Depends(get_db)):
+    return tasks_database.get_users_tasks(db,user_id,status)
