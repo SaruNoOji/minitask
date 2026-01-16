@@ -1,3 +1,4 @@
+from os import read
 from sqlalchemy.orm.session import Session
 from db.models import DbTasks, DbUser
 from schemas import TasksCreate, TaskUpdate
@@ -23,3 +24,12 @@ def create_task(db: Session, request: TasksCreate, user_id: int):
     db.commit()
     db.refresh(new_task)
     return new_task
+
+def get_task(db:Session,id:int):
+    
+    task = db.query(DbTasks).filter(DbTasks.id == id).first()
+
+    if not task:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail= "Task not found")
+    
+    return task

@@ -1,10 +1,15 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.orm.session import Session
+from db.database import get_db
+from db import tasks_database
+from schemas import TasksDisplay
 
 router = APIRouter(
     prefix='/tasks',
     tags=['tasks']
 )
 
-@router.get("/")
-def index():
-    return "Ok"
+
+@router.get("/{id}", status_code=status.HTTP_200_OK, response_model=TasksDisplay)
+def get_task(id:int, db: Session = Depends(get_db)):
+    return tasks_database.get_task(db,id)
