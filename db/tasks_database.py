@@ -33,3 +33,22 @@ def get_task(db:Session,id:int):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail= "Task not found")
     
     return task
+
+
+def update_task(db: Session, request: TaskUpdate, id:int):
+
+    task = db.query(DbTasks).filter(DbTasks.id == id).first()
+
+    if not task:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail= "Task not found")
+    
+    if request.title is not None:
+        task.title = request.title
+    if request.description is not None:
+        task.description = request.description
+    if request.status is not None:
+        task.status = request.status
+
+    db.commit()
+
+    return task
